@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veloce Motors | Sports Cars</title>
+
+<style>
+:root{
+    --bg:#ffffff;
+    --text:#111;
+    --card:#f3f4f6;
+    --accent:#ff2e63;
+}
+
+body.dark{
+    --bg:#0f172a;
+    --text:#e2e8f0;
+    --card:#1e293b;
+    --accent:#ff4d80;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    transition:0.4s ease;
+}
+
+/* NAV */
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 8%;
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    z-index:1000;
+}
+
+nav a{
+    margin-left:20px;
+    text-decoration:none;
+    color:var(--text);
+    font-weight:500;
+}
+
+nav a:hover{color:var(--accent);}
+
+.theme-toggle{
+    padding:6px 12px;
+    margin-left:15px;
+    border:none;
+    background:var(--accent);
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* HERO */
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:80px 8%;
+    min-height:90vh;
+}
+
+.hero-text{max-width:550px;}
+
+.hero-text h2{
+    font-size:48px;
+    line-height:1.1;
+}
+
+.hero-text span{color:var(--accent);}
+
+.hero-text p{
+    margin-top:20px;
+    line-height:1.6;
+}
+
+.hero-buttons{
+    margin-top:30px;
+}
+
+.hero-buttons button{
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    margin-right:15px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.primary-btn{
+    background:var(--accent);
+    color:white;
+}
+
+.secondary-btn{
+    background:transparent;
+    border:2px solid var(--accent);
+    color:var(--accent);
+}
+
+.secondary-btn:hover{
+    background:var(--accent);
+    color:white;
+}
+
+.hero-image img{
+    width:500px;
+    border-radius:20px;
+}
+
+/* SECTION */
+section{
+    padding:100px 8%;
+    text-align:center;
+}
+
+/* PRODUCT GRID */
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:30px;
+    margin-top:40px;
+}
+
+/* CARD FIXED */
+.card{
+    position:relative;
+    height:420px;
+    border-radius:16px;
+    overflow:hidden;
+    cursor:pointer;
+    background:black;
+}
+
+/* IMAGE PERFECT FIT */
+.card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:0.4s;
+}
+
+.card:hover img{
+    transform:scale(1.08);
+}
+
+/* OVERLAY */
+.card-content{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    padding:20px;
+    background:linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    color:white;
+}
+
+/* SCROLL REVEAL */
+.reveal{
+    opacity:0;
+    transform:translateY(60px);
+    transition:all 0.8s ease;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+footer{
+    padding:20px;
+    text-align:center;
+}
+ 
+  
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+/* MAIN TYPING STYLE */
+.typing { 
+    border-right: 3px solid var(--accent); 
+    padding-right: 5px; 
+    display: inline-block; 
+}
+
+/* Tablet and mobile adjustments */
+@media (max-width: 1024px){
+    .hero{
+        padding:60px 6%;
+    }
+
+    .hero-text h2{
+        font-size:40px;
+    }
+
+    .hero-image img{
+        width:400px;
+    }
+}
+
+@media (max-width: 768px){
+    /* Hero stacked vertically */
+    .hero{
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text{
+        max-width: 100%;
+    }
+
+    .hero-text h2{
+        font-size:32px;
+    }
+
+    .typing{
+        white-space: normal; /* wrap text on mobile */
+        font-size:16px;      /* smaller font on mobile */
+    }
+
+    .hero-buttons{
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        gap:15px;
+    }
+
+    .hero-buttons button{
+        width:100%;
+        max-width:300px;
+    }
+
+    .hero-image img{
+        width:100%;
+        max-width:350px;
+        margin-top:40px;
+    }
+
+    section{
+        padding:70px 6%;
+    }
+}
+
+@media (max-width: 480px){
+    .hero-text h2{
+        font-size:26px;
+    }
+
+    nav{
+        flex-direction: column;
+        gap:10px;
+    }
+
+    nav div{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .product-grid{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        height:300px;
+    }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<h1>Veloce Motors</h1>
+<div>
+<a href="#">Home</a>
+<a href="#products">Shop</a>
+<a href="#contact">Contact</a>
+<button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero reveal">
+<div class="hero-text">
+<h2>Drive Into <span>Pure Power</span></h2>
+<p id="typing"></p>
+
+<div class="hero-buttons">
+<button class="primary-btn" onclick="scrollToSection('products')">Explore Cars</button>
+<button class="secondary-btn" onclick="scrollToSection('collection')">View Collection</button>
+</div>
+</div>
+
+<div class="hero-image">
+<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
+</div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="reveal">
+<h2>Featured Cars</h2>
+
+<div class="product-grid">
+
+<div class="card reveal">
+<img src="https://i.pinimg.com/736x/9a/c2/78/9ac278e8b005bdf25c06b1e1e12483ba.jpg">
+<div class="card-content">
+<h3>Porsche 911</h3>
+<p>₱12,500,000</p>
+</div>
+</div>
+
+<div class="card reveal">
+<img src="https://i.pinimg.com/736x/a6/5c/44/a65c440570e7953bde35a1284da2cab9.jpg">
+<div class="card-content">
+<h3>Nissan GT-R</h3>
+<p>₱9,500,000</p>
+</div>
+</div>
+
+<div class="card reveal">
+<img src="https://i.pinimg.com/736x/50/5d/7b/505d7b2d1cdfd8f73bcc37a6095e3d21.jpg">
+<div class="card-content">
+<h3>BMW M4</h3>
+<p>₱11,200,000</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- COLLECTION SECTION (NEW) -->
+<section id="collection" class="reveal">
+<h2>Full Collection</h2>
+<p>Explore our complete lineup of high-performance luxury sports cars designed for speed and prestige.</p>
+
+<div class="product-grid">
+
+<div class="card reveal">
+<img src="https://images.unsplash.com/photo-1493238792000-8113da705763">
+<div class="card-content">
+<h3>Ferrari 488</h3>
+<p>₱18,000,000</p>
+</div>
+</div>
+
+<div class="card reveal">
+<img src="https://images.unsplash.com/photo-1542362567-b07e54358753">
+<div class="card-content">
+<h3>Lamborghini Huracán</h3>
+<p>₱21,000,000</p>
+</div>
+</div>
+
+<div class="card reveal">
+<img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d">
+<div class="card-content">
+<h3>McLaren 720S</h3>
+<p>₱22,500,000</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section id="contact" class="reveal">
+<h2>Contact Us</h2>
+<p>Email: emersonsacrizserrano@gmail.com</p>
+<p>Phone: +63 981 302 4768</p>
+</section>
+
+<footer>
+© 2026 Veloce Motors. All Rights Reserved.
+</footer>
+
+<script>
+
+/* THEME */
+function toggleTheme(){
+    document.body.classList.toggle("dark");
+}
+
+/* SMOOTH SCROLL */
+function scrollToSection(id){
+    document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+/* SCROLL REVEAL */
+function revealOnScroll(){
+    const reveals = document.querySelectorAll(".reveal");
+    const windowHeight = window.innerHeight;
+
+    reveals.forEach(el=>{
+        const top = el.getBoundingClientRect().top;
+        const bottom = el.getBoundingClientRect().bottom;
+
+        if(top < windowHeight - 100 && bottom > 0){
+            el.classList.add("active");
+        } else {
+            el.classList.remove("active");
+        }
+    });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+window.addEventListener("load", revealOnScroll);
+
+ /* 🔥 TYPING EFFECT */
+const sentences = [
+"Luxury sports cars engineered for performance and adrenaline.",
+"Built for speed. Designed for dominance.",
+"Where engineering meets obsession.",
+"Precision crafted. Track ready.",
+"Unleash the power within.",
+"Drive beyond limits."
+];
+
+let i = 0;
+let j = 0;
+let currentSentence = "";
+let isDeleting = false;
+const typingElement = document.getElementById("typing");
+
+function type(){
+    currentSentence = sentences[i];
+
+    if(!isDeleting){
+        typingElement.textContent = currentSentence.substring(0, j++);
+        if(j > currentSentence.length){
+            isDeleting = true;
+            setTimeout(type, 1500);
+            return;
+        }
+    } else {
+        typingElement.textContent = currentSentence.substring(0, j--);
+        if(j < 0){
+            isDeleting = false;
+            i = (i + 1) % sentences.length;
+        }
+    }
+    setTimeout(type, isDeleting ? 40 : 70);
+}
+
+type();
+  
+</script>
+
+</body>
+</html>
