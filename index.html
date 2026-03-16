@@ -398,12 +398,85 @@ background:var(--accent);
 color:white;
 }
 
+    .booking-section{
+    padding:80px 20px;
+    background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
+    color:white;
+}
+
+.booking-card{
+    max-width:600px;
+    margin:auto;
+    background:#111;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 0 40px rgba(255,0,0,0.2);
+}
+
+.booking-card h2{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.booking-card p{
+    text-align:center;
+    margin-bottom:30px;
+    color:#aaa;
+}
+
+.form-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.booking-card input,
+.booking-card select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    outline:none;
+}
+
+.submit-btn{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    background:red;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.submit-btn:hover{
+    background:darkred;
+    transform:scale(1.05);
+}
+
+    .popup{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    background:green;
+    color:white;
+    padding:15px 20px;
+    border-radius:10px;
+    display:none;
+}
     
 </style>
 </head>
 
 <body>
 
+    <div id="successPopup" class="popup">
+✔ Booking Submitted Successfully!
+</div>
+    
 <div class="chat-head" onclick="toggleChat()">💬</div>
 
 <div class="chat-box" id="chatBox">
@@ -529,23 +602,23 @@ color:white;
 </section>
 
 <!-- LEAD + BOOKING SECTION -->
-<section id="booking" class="reveal">
-<h2>Book a Test Drive / Request a Quote</h2>
+<section id="booking" class="booking-section">
 
-<form id="leadForm" style="max-width:500px;margin:30px auto;display:flex;flex-direction:column;gap:12px;">
+<div class="booking-card">
+<h2>Schedule Your Test Drive</h2>
+<p>Experience performance like never before.</p>
 
-<input type="text" id="leadName" placeholder="Full Name" required 
-style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+<form id="leadForm">
 
-<input type="email" id="leadEmail" placeholder="Email Address" required
-style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+<div class="form-row">
+<input type="text" id="leadName" placeholder="Full Name" required>
+<input type="email" id="leadEmail" placeholder="Email Address" required>
+</div>
 
-<input type="tel" id="leadPhone" placeholder="Phone Number" required
-style="padding:10px;border-radius:8px;border:1px solid #ccc;">
-
-<select id="leadCar"
-style="padding:10px;border-radius:8px;border:1px solid #ccc;">
-<option value="">Select Car</option>
+<div class="form-row">
+<input type="tel" id="leadPhone" placeholder="Phone Number" required>
+<select id="leadCar" required>
+<option value="">Select Car Model</option>
 <option>Porsche 911</option>
 <option>Nissan GT-R</option>
 <option>BMW M4</option>
@@ -553,18 +626,17 @@ style="padding:10px;border-radius:8px;border:1px solid #ccc;">
 <option>Lamborghini Huracán</option>
 <option>McLaren 720S</option>
 </select>
+</div>
 
-<input type="date" id="leadDate"
-style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+<input type="date" id="leadDate" required>
 
-<button type="submit"
-style="padding:12px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
-Submit Request
+<button type="submit" class="submit-btn">
+Book Test Drive
 </button>
 
 </form>
 
-<p id="formMessage"></p>
+</div>
 
 </section>
     
@@ -657,20 +729,27 @@ document.getElementById("leadForm").addEventListener("submit", async function(e)
     };
 
     try{
+
         await fetch(LEAD_WEBHOOK,{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(leadData)
         });
 
-        document.getElementById("formMessage").innerText =
-        "✅ Thank you! We will contact you soon.";
+        const popup = document.getElementById("successPopup");
+        popup.style.display = "block";
+
+        setTimeout(()=>{
+            popup.style.display = "none";
+        },3000);
 
         document.getElementById("leadForm").reset();
 
     }catch(error){
+
         document.getElementById("formMessage").innerText =
         "❌ Something went wrong.";
+
     }
 });
 </script>
