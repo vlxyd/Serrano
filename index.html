@@ -730,26 +730,28 @@ document.getElementById("leadForm").addEventListener("submit", async function(e)
 
     try{
 
-        await fetch(LEAD_WEBHOOK,{
+        const response = await fetch(LEAD_WEBHOOK,{
             method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(leadData)
+            body: JSON.stringify(leadData)
         });
 
-        const popup = document.getElementById("successPopup");
-        popup.style.display = "block";
+        if(response.ok){
 
-        setTimeout(()=>{
-            popup.style.display = "none";
-        },3000);
+            document.getElementById("successPopup").style.display="block";
 
-        document.getElementById("leadForm").reset();
+            setTimeout(()=>{
+                document.getElementById("successPopup").style.display="none";
+            },3000);
+
+            document.getElementById("leadForm").reset();
+
+        } else {
+            alert("Failed to send data.");
+        }
 
     }catch(error){
-
-        document.getElementById("formMessage").innerText =
-        "❌ Something went wrong.";
-
+        alert("Connection error.");
+        console.error(error);
     }
 });
 </script>
@@ -758,7 +760,7 @@ document.getElementById("leadForm").addEventListener("submit", async function(e)
 
 /* CONFIG */
 const OPENAI_API_KEY = "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";
-const LEAD_WEBHOOK = "https://script.google.com/macros/s/AKfycbzxNryJnf2z2pWocMKCqNZ_NbjDizPUQk9J6Wtt-gxPRsHtyUEwke1JbZvz3U7-CoMOjg/exec";
+
 
 /* CHAT SYSTEM */
 let leadStep = 0;
