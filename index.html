@@ -283,11 +283,51 @@ footer{
 }
 
 
+/* ALL THE CHAT CSS HERE */
+.chat-head { ... }
+.chat-box { ... }
+.chat-header { ... }
+.chat-messages { ... }
+.msg { ... }
+.bot { ... }
+.user { ... }
+.chat-input { ... }
+.chat-input input { ... }
+.chat-input button { ... }
+.quick-actions { ... }
+.quick-actions button { ... }
+.quick-actions button:hover { ... }
+
+    
 </style>
 </head>
 
 <body>
 
+<div class="chat-head" onclick="toggleChat()">💬</div>
+
+<div class="chat-box" id="chatBox">
+   <div class="chat-header">Veloce AI Sales Assistant</div>
+
+   <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">
+         Hello! I'm Veloce AI. Ask about our sports cars.
+      </div>
+   </div>
+
+   <div class="quick-actions">
+      <button onclick="quickAsk('how to buy')">How to Buy</button>
+      <button onclick="quickAsk('availability')">Availability</button>
+      <button onclick="quickAsk('payment')">Payment</button>
+      <button onclick="quickAsk('contact')">Contact</button>
+   </div>
+
+   <div class="chat-input">
+      <input id="chatInput" placeholder="Ask about Porsche, BMW, Ferrari...">
+      <button onclick="sendMessage()">Send</button>
+   </div>
+</div>
+    
 <nav>
 <h1>Veloce Motors</h1>
 <div>
@@ -464,5 +504,145 @@ type();
   
 </script>
 
+    <script>
+
+/* CONFIG */
+const OPENAI_API_KEY = "PASTE_OPENAI_API_KEY_HERE";
+const LEAD_WEBHOOK = "PASTE_GOOGLE_SCRIPT_URL";
+
+/* CHAT SYSTEM */
+let leadStep = 0;
+let lead = {name:"",email:"",interest:""};
+
+function toggleChat(){
+   const chat = document.getElementById("chatBox");
+   chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+}
+
+function addMessage(text,type){
+   const box = document.getElementById("chatMessages");
+   const msg = document.createElement("div");
+   msg.className = "msg "+type;
+   msg.innerHTML = text;
+   box.appendChild(msg);
+   box.scrollTop = box.scrollHeight;
+}
+
+function quickAsk(text){
+   addMessage(text,"user");
+   botLogic(text);
+}
+
+function sendMessage(){
+   const input = document.getElementById("chatInput");
+   const text = input.value.trim();
+   if(!text) return;
+
+   addMessage(text,"user");
+   input.value="";
+   botLogic(text.toLowerCase());
+}
+
+/* BOT LOGIC */
+function botLogic(text){
+
+   if(text.includes("buy")){
+      addMessage("Great! May I know your name?","bot");
+      leadStep=1;
+      return;
+   }
+
+   if(leadStep===1){
+      lead.name=text;
+      leadStep=2;
+      addMessage("Nice to meet you "+text+"! What's your email?","bot");
+      return;
+   }
+
+   if(leadStep===2){
+      lead.email=text;
+      leadStep=0;
+      addMessage("Thank you! Our sales team will contact you shortly.","bot");
+      sendLead();
+      return;
+   }
+
+   if(text.includes("porsche")){
+      lead.interest="Porsche 911";
+      addMessage("Porsche 911 costs ₱12,500,000.","bot");
+      return;
+   }
+
+   if(text.includes("bmw")){
+      lead.interest="BMW M4";
+      addMessage("BMW M4 costs ₱11,200,000.","bot");
+      return;
+   }
+
+   if(text.includes("ferrari")){
+      lead.interest="Ferrari 488";
+      addMessage("Ferrari 488 costs ₱18,000,000.","bot");
+      return;
+   }
+
+   if(text.includes("availability")){
+      addMessage("Most cars are available. Which model interests you?","bot");
+      return;
+   }
+
+   if(text.includes("payment")){
+      addMessage("We accept bank transfer, financing, and cash.","bot");
+      return;
+   }
+
+   if(text.includes("contact")){
+      addMessage("Email: example@email.com","bot");
+      return;
+   }
+
+   askAI(text);
+}
+
+/* OPENAI AI */
+async function askAI(message){
+
+   addMessage("Thinking...","bot");
+
+   try{
+
+      const res = await fetch("https://api.openai.com/v1/chat/completions",{
+         method:"POST",
+         headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer "+OPENAI_API_KEY
+         },
+         body:JSON.stringify({
+            model:"gpt-4o-mini",
+            messages:[
+               {role:"system",content:"You are a luxury sports car sales assistant."},
+               {role:"user",content:message}
+            ]
+         })
+      });
+
+      const data = await res.json();
+
+      addMessage(data.choices[0].message.content,"bot");
+
+   }catch(err){
+      addMessage("AI unavailable.","bot");
+   }
+}
+
+/* SEND LEAD */
+function sendLead(){
+   fetch(LEAD_WEBHOOK,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(lead)
+   });
+}
+
+</script>
 </body>
 </html>
